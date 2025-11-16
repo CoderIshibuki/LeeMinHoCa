@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hồ Cá Tối Thượng</title>
+    <style>
+        body {
+            display: grid;
+            place-items: center;
+            min-height: 100vh;
+            background-color: #e0f7fa;
+            margin: 0;
+            font-family: sans-serif;
+        }
+
+        #fish-tank {
+            width: 90vw;
+            max-width: 900px;
+            height: 60vh;
+            background: linear-gradient(to bottom, #a0e9ff, #5fbcff);
+            border: 10px solid #555;
+            border-radius: 15px;
+            position: relative; 
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            cursor: pointer;
+        }
+
+
+        #fish-tank::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: linear-gradient(
+                -45deg, 
+                rgba(255, 255, 255, 0.15) 25%, transparent 25%, 
+                transparent 50%, rgba(255, 255, 255, 0.15) 50%, 
+                transparent 75%, rgba(255, 255, 255, 0.15) 75%,
+                transparent
+            );
+            background-size: 60px 60px;
+            animation: light-rays 20s linear infinite;
+            z-index: 0; 
+        }
+        @keyframes light-rays {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(60px, 60px); }
+        }
+
+
+        #surface-ripples {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            filter: blur(3px);
+            z-index: 11;
+       
+            animation: ripple 3s infinite ease-in-out;
+        }
+
+        @keyframes ripple {
+            0%, 100% {
+                transform: scaleY(1);
+                box-shadow: 0 2px 4px rgba(255, 255, 255, 0.2);
+            }
+            50% {
+                transform: scaleY(1.2);
+                box-shadow: 0 3px 6px rgba(255, 255, 255, 0.3);
+            }
+        }
+        
+      
+        #sand {
+            position: absolute; bottom: 0; left: 0;
+            width: 100%; height: 60px;
+            background: #f7d98e;
+            border-top: 5px solid #e0c27f;
+            z-index: 1; 
+        }
+
+        /* 4. Đá ngầm (MỚI) */
+        .rock {
+            position: absolute;
+            bottom: 60px; /* Nằm trên cát */
+            background: #616161; /* Màu đá xám đậm */
+            border-radius: 15px 15px 5px 5px;
+            z-index: 2; /* Nằm trên cát */
+            box-shadow: inset 0 3px 5px rgba(0,0,0,0.2); /* Tạo chiều sâu */
+        }
+        .rock.r1 {
+            width: 120px;
+            height: 50px;
+            left: 30%;
+            border-radius: 30px 10px;
+        }
+        .rock.r2 {
+            width: 80px;
+            height: 30px;
+            left: 38%;
+            bottom: 60px; /* Nằm chồng lên đá r1 */
+            background: #757575; /* Màu sáng hơn 1 chút */
+            z-index: 3; /* Nằm trên đá r1 */
+        }
+
+
+        .seaweed {
+            position: absolute; bottom: 60px;
+            width: 25px; height: 120px;
+            background: linear-gradient(to top, #4a934a, #6cdc6c);
+            border-radius: 10px 10px 0 0;
+            z-index: 2;
+            transform-origin: bottom center;
+            animation: sway 4s infinite ease-in-out;
+        }
+        .seaweed.s1 { left: 20%; height: 100px; animation-duration: 5s; }
+        .seaweed.s2 { left: 70%; height: 150px; }
+        .seaweed.s3 { left: 45%; height: 80px; animation-duration: 3s; } /* Cây mới */
+        @keyframes sway {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+
+        #bubbles { position: absolute; bottom: 60px; width: 100%; height: 100%; z-index: 4; }
+        .bubble {
+            position: absolute; bottom: 0;
+            width: 10px; height: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            animation: bubble-rise 10s infinite ease-in;
+            opacity: 0;
+        }
+        @keyframes bubble-rise {
+            0% { bottom: 0; opacity: 1; transform: scale(0.5); }
+            100% { bottom: 90%; opacity: 0; transform: scale(1.2); }
+        }
+
+
+
+   
+        .jellyfish {
+            position: absolute;
+            top: 20%;
+            left: 80%;
+            font-size: 2.5rem;
+            color: rgba(255, 179, 186, 0.7); 
+            filter: blur(1px);
+            z-index: 5;
+            animation: bobbing 6s infinite ease-in-out;
+        }
+
+        @keyframes bobbing {
+            0%, 100% { transform: translateY(0) rotate(5deg); }
+            50% { transform: translateY(25px) rotate(-5deg); }
+        }
+
+
+        .starfish {
+            position: absolute;
+            bottom: 70px; 
+            left: 39%;
+            font-size: 2rem;
+            color: #ff6e40; 
+            transform: rotate(-15deg);
+            z-index: 4; 
+        }
+
+
+        #crab {
+            position: absolute; bottom: 10px; left: 10px;
+            font-size: 2.5rem;
+            z-index: 6;
+            animation: scuttle 20s infinite linear;
+        }
+        @keyframes scuttle {
+            0%   { left: 10px; transform: scaleX(1); }
+            45%  { left: calc(100% - 80px); transform: scaleX(1); }
+            50%  { left: calc(100% - 80px); transform: scaleX(-1); }
+            95%  { left: 10px; transform: scaleX(-1); }
+            100% { left: 10px; transform: scaleX(1); }
+        }
+
+
+        .food {
+            position: absolute; top: 0;
+            width: 8px; height: 8px;
+            background: #964B00;
+            border-radius: 50%;
+            z-index: 9;
+            animation: sink 5s linear forwards;
+            opacity: 1;
+        }
+        @keyframes sink {
+            0% { transform: translateY(0); opacity: 1; }
+            80% { opacity: 1; }
+            100% { transform: translateY(calc(60vh - 70px)); opacity: 0; }
+        }
+
+  
+        .fish {
+            position: absolute; 
+            width: 50px; height: auto;
+            transition: transform 0.3s ease-out; 
+            user-select: none; 
+            z-index: 10; 
+        }
+    </style>
+</head>
+<<body>
+
+    <h1>Hồ Cá Tối Thượng</h1>
+    
+    <div id="fish-tank">
+        <div id="surface-ripples"></div>
+        <div id="sand"></div>
+
+        <div class="rock r1"></div>
+        <div class="rock r2"></div>
+
+        <div class="starfish">⭐</div>
+
+        <div class="seaweed s1"></div>
+        <div class="seaweed s2"></div>
+        <div class="seaweed s3"></div>
+        
+        <div id="bubbles">
+            <span class="bubble" style="left: 15%; animation-delay: 1s;"></span>
+            <span class="bubble" style="left: 50%; animation-delay: 0s;"></span>
+            <span class="bubble" style="left: 80%; animation-delay: 3s;"></span>
+            <span class="bubble" style="left: 30%; animation-delay: 5s;"></span>
+            <span class="bubble" style="left: 65%; animation-delay: 4s;"></span>
+        </div>
+
+        <div id="crab">🦀</div>
+
+        
+        </div>
+
+    <script>
+
+
+        const tank = document.getElementById('fish-tank');
+        const fishTypes = [
+            'https://img.icons8.com/color/48/000000/fish.png',
+            'https://img.icons8.com/color/48/000000/clown-fish.png',
+            'https://img.icons8.com/color/48/000000/puffer-fish.png',
+            'https://img.icons8.com/fluency/48/000000/koi-fish.png'
+        ]; 
+        const fishes = [];
+        const numFish = 8;
+
+
+
+
+        function createFish() {
+            const fishElement = document.createElement('img');
+            fishElement.classList.add('fish');
+            fishElement.src = fishTypes[Math.floor(Math.random() * fishTypes.length)];
+            
+            const tankRect = tank.getBoundingClientRect();
+            const fishSize = 50;
+            
+            let fish = {
+                element: fishElement,
+                x: Math.random() * (tankRect.width - fishSize),
+                y: Math.random() * (tankRect.height - fishSize - 60),
+                dx: (Math.random() * 2 + 1) * (Math.random() < 0.5 ? 1 : -1), 
+                dy: (Math.random() * 1 - 0.5) 
+            };
+
+            fish.element.style.transform = `scaleX(${fish.dx > 0 ? 1 : -1})`;
+            fishes.push(fish);
+            tank.appendChild(fishElement);
+        }
+
+        for (let i = 0; i < numFish; i++) {
+            createFish();
+        }
+
+        function animate() {
+            const tankRect = tank.getBoundingClientRect();
+            const fishSize = 50;
+            const sandHeight = 60;
+
+            fishes.forEach(fish => {
+                fish.x += fish.dx;
+                fish.y += fish.dy;
+
+                if (fish.x <= 0 || fish.x >= tankRect.width - fishSize) {
+                    fish.dx *= -1;
+                    fish.element.style.transform = `scaleX(${fish.dx > 0 ? 1 : -1})`;
+                }
+                
+                if (fish.y <= 0 || fish.y >= tankRect.height - fishSize - sandHeight) {
+                    fish.dy *= -1;
+                }
+
+                fish.element.style.left = fish.x + 'px';
+                fish.element.style.top = fish.y + 'px';
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+    </script>
+</body>
+</html>
